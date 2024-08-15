@@ -56,6 +56,7 @@ app.patch('/tasks/:id', (req, res) => {
         Object.keys(req.body).forEach((key) => {
             task[key] = req.body[key];
         });
+        task.updatedAt = new Date();
         res.send(task);
     } else {
         res.status(404).send({message: 'Cannot find given id.'});
