@@ -6,6 +6,22 @@ import Task from './models/tasks.js';
 
 const app = express();
 app.use(express.json());
+//비동기 처리
+function asyncHandler(handler) {
+    return async function (req, res) {
+        try {
+            await handler (req, res);
+        } catch (e) {
+            if (e.name === 'ValidationError') {
+                res.status(400).send({ message : e.message });
+            } else if (e.name === 'CastError') {
+                res.status(404).send({ message: 'Cannot find given id.' });
+            } else {
+                res.status(500).send({ message: e.message });
+            }
+        }
+    }
+}
 app.get('/tasks', async (req, res) => {
     /**
      * 쿼리 파라미터 
@@ -34,10 +50,10 @@ app.get('/tasks/:id', async (req, res) => {
 /**
  * 새 태스크 하나 생성하기
  */
-app.post('/tasks', async (req, res) => {
+app.post('/tasks', asyncHandler(async (req, res) => {
     const newTask = await Task.create(req.body)
     res.status(201).send(newTask);
-});
+}));
 
 app.patch('/tasks/:id', (req, res) => {
     const id = Number(req.params.id);
