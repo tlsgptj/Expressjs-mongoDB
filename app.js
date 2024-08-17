@@ -34,14 +34,8 @@ app.get('/tasks/:id', async (req, res) => {
 /**
  * 새 태스크 하나 생성하기
  */
-app.post('/tasks', (req, res) => {
-    const newTask = req.body;
-    const ids = tasks.map((task) => task.id);
-    newTask.id = Math.max(...ids) + 1;
-    newTask.isComplete = false;
-    newTask.createdAt = new Date();
-    newTask.updatedAt = new Date();
-    tasks.push(newTask);
+app.post('/tasks', async (req, res) => {
+    const newTask = await Task.create(req.body)
     res.status(201).send(newTask);
 });
 
