@@ -1,5 +1,4 @@
 import express from 'express';
-import tasks from './data/mock.js';
 import mongoose from 'mongoose';
 import { DATABASE_URL } from './env.js';
 import Task from './models/tasks.js';
@@ -55,7 +54,7 @@ app.post('/tasks', asyncHandler(async (req, res) => {
     res.status(201).send(newTask);
 }));
 
-app.patch('/tasks/:id', async (req, res) => {
+app.patch('/tasks/:id', asyncHandler(async (req, res) => {
     const id = Number(req.params.id);
     const task = await Task.findById(id);
     if (task) {
@@ -68,9 +67,9 @@ app.patch('/tasks/:id', async (req, res) => {
         res.status(404).send({message: 'Cannot find given id.'});
     }
     
-});
-
-app.delete('/tasks/:id', async (req, res) => {
+}));
+//데이터 추가 및 삭제
+app.delete('/tasks/:id', asyncHandler(async (req, res) => {
     const id = req.params.id;
     const task = await Task.findByIdAndDelete(id);
     if (task) {
@@ -79,7 +78,7 @@ app.delete('/tasks/:id', async (req, res) => {
         res.status(404).send({message: 'Cannot find given id.'});
     }
     
-});
+}));
 
 mongoose.connect(DATABASE_URL).then(() => console.log('Connected to DB'));
 app.listen(3000, () => console.log('Server Started'));
