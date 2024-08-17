@@ -9,3 +9,10 @@
 - 생성, 조회, 수정, 삭제 등을 의미함 app.js에 함수 참고
 ### 비동기 오류
 - 비동기 코드엑서 오류가 나면 서버가 죽기 때문에 따로 처리 필수(asyncHandler)
+
+### 그렇다면 서비스 배포는 어떻게 하냐?
+1. 환경 변수 설정 env.js파일 생성
+npm install dotenv
+2. CORS 설정 
+npm install cors
+3. 깃헙에 올리기
